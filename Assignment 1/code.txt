@@ -1,0 +1,58 @@
+options linesize=78;
+
+* read in the data *;
+
+data ibm;
+infile 'C:\Users\azure\OneDrive\Desktop\school stuff\econ 4140\Assignment 1\IBM.txt';
+input price;
+return = dif(log(price));
+t=_n_;
+
+* print the data *;
+
+proc print data=ibm;
+run;
+
+* calculate the statistics *;
+
+title 'daily IBM prices 1/2/2008 - 1/20/2010';
+
+proc univariate normal plot;
+var return;
+probplot;
+
+run; 
+
+* plot the prices *;
+ 
+proc gplot;
+
+plot price*t;
+
+symbol interpol=joint;
+
+run;
+
+
+* plot the returns *;
+
+title 'daily IBM returns 1/2/2008 - 1/20/2010';
+
+proc gplot;
+
+plot return*t;
+
+symbol interpol=joint;
+
+run;
+
+
+
+
+* estimate the AR(1) model *;
+
+proc autoreg;
+
+model return =/nlag = 1;
+
+run; 
